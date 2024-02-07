@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_todo_app/todo.dart';
+import 'package:the_todo_app/todo_model.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
   const TodoDetailsScreen({
@@ -46,6 +47,12 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                       });
                     }),
               ],
+            ),
+            Text(
+              "Aktuell noch offene Todos: ${openTodos.length.toString()}",
+            ),
+            Text(
+              "Insgesamt erledigte Todos: ${doneTodos.length.toString()}",
             ),
           ],
         ),
