@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:the_todo_app/todo.dart';
 
 class TodoDetailsScreen extends StatefulWidget {
-  const TodoDetailsScreen({super.key, required this.todo});
+  const TodoDetailsScreen({
+    super.key,
+    required this.todo,
+    required this.statusCheck,
+  });
 
   final Todo todo;
+  final void Function(bool) statusCheck;
 
   @override
   State<TodoDetailsScreen> createState() => _TodoDetailsScreenState();
@@ -16,16 +21,16 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.todo.topic),
-      ), // AppBar
+      ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 48), // SizedBox
+            const SizedBox(height: 48),
             Text(
               "ID: ${widget.todo.id}",
               style: const TextStyle(fontSize: 32),
-            ), // Text
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -35,16 +40,16 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                 ),
                 Checkbox(
                     value: widget.todo.isDone,
-                    onChanged: (change) {
+                    onChanged: (newValue) {
                       setState(() {
-                        widget.todo.isDone = change ?? false;
+                        widget.statusCheck(newValue!);
                       });
                     }),
               ],
             ),
-          ], // <Widget>[]
+          ],
         ),
-      ), // Padding
-    ); // Scaffold
+      ),
+    );
   }
 }

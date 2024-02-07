@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:the_todo_app/todo.dart';
 import 'package:the_todo_app/todo_item.dart';
+import 'package:the_todo_app/todo_model.dart';
 
-class TodoMainScreen extends StatelessWidget {
+class TodoMainScreen extends StatefulWidget {
   const TodoMainScreen({
     super.key,
-    required this.openTodos,
-    required this.doneTodos,
-    required this.todos,
   });
 
-  final List<Todo> openTodos;
-  final List<Todo> doneTodos;
-  final List<Todo> todos;
+  @override
+  State<TodoMainScreen> createState() => _TodoMainScreenState();
+}
+
+class _TodoMainScreenState extends State<TodoMainScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class TodoMainScreen extends StatelessWidget {
         title: const Text(
           "ToDo App",
           style: TextStyle(fontSize: 32),
-        ), // Text
+        ),
         backgroundColor: Colors.lightBlue[500],
         actions: [
           TextButton(
@@ -49,13 +52,19 @@ class TodoMainScreen extends StatelessWidget {
             ),
           ),
         ],
-      ), // AppBar
+      ),
       body: ListView.builder(
         itemCount: todos.length,
         itemBuilder: (context, index) {
-          return TodoItem(todo: todos[index]);
+          return TodoItem(
+              todo: todos[index],
+              updateItemStatus: (newStatus) {
+                setState(() {
+                  todos[index].isDone = newStatus;
+                });
+              });
         },
-      ), // Container
+      ),
     );
   }
 }
