@@ -1,52 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:the_todo_app/todo.dart';
+import 'package:provider/provider.dart';
 import 'package:the_todo_app/todo_details_screen.dart';
+import 'package:the_todo_app/todo_model.dart';
 
-class TodoItem extends StatefulWidget {
+class TodoItem extends StatelessWidget {
+  final int index;
   const TodoItem({
     super.key,
-    required this.todo,
-    required this.updateItemStatus,
+    required this.index,
   });
 
-  final Todo todo;
-  final void Function(bool) updateItemStatus;
-
-  @override
-  State<TodoItem> createState() => _TodoItemState();
-}
-
-class _TodoItemState extends State<TodoItem> {
   @override
   Widget build(BuildContext context) {
+    final todoProvider = context.read<TodoProvider>();
+    final todo = todoProvider.todos[index];
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => TodoDetailsScreen(
-              todo: widget.todo,
-              statusCheck: (bool statusCheck) {
-                setState(() {
-                  widget.todo.isDone = statusCheck;
-                  widget.updateItemStatus(statusCheck);
-                });
-              },
+              todo: todo,
             ),
           ),
         );
       },
       child: ListTile(
         leading: Checkbox(
-          value: widget.todo.isDone,
-          onChanged: (bool? newStatus) {
-            setState(() {
-              widget.todo.isDone = newStatus ?? false;
-              widget.updateItemStatus(newStatus ?? false);
-            });
+          value: todo.isDone,
+          onChanged: (newValue) {
+            todoProvider.updateTodoStatus(index, newValue ?? false);
           },
         ),
-        title: Text(widget.todo.topic),
+        title: Text(todo.topic),
       ),
     );
   }

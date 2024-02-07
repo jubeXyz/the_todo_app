@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:the_todo_app/todo.dart';
 import 'package:the_todo_app/todo_model.dart';
 
-class TodoDetailsScreen extends StatefulWidget {
+class TodoDetailsScreen extends StatelessWidget {
   const TodoDetailsScreen({
     super.key,
     required this.todo,
-    required this.statusCheck,
   });
 
   final Todo todo;
-  final void Function(bool) statusCheck;
 
-  @override
-  State<TodoDetailsScreen> createState() => _TodoDetailsScreenState();
-}
-
-class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
   @override
   Widget build(BuildContext context) {
+    final todoProvider = Provider.of<TodoProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.todo.topic),
+        title: Text(todo.topic),
       ),
       body: Center(
         child: Column(
@@ -29,7 +25,7 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
           children: [
             const SizedBox(height: 48),
             Text(
-              "ID: ${widget.todo.id}",
+              "ID: ${todo.id}",
               style: const TextStyle(fontSize: 32),
             ),
             Row(
@@ -40,19 +36,17 @@ class _TodoDetailsScreenState extends State<TodoDetailsScreen> {
                   style: TextStyle(fontSize: 24),
                 ),
                 Checkbox(
-                    value: widget.todo.isDone,
+                    value: todo.isDone,
                     onChanged: (newValue) {
-                      setState(() {
-                        widget.statusCheck(newValue!);
-                      });
+                      todoProvider.updateTodoStatus(todo.id, newValue ?? false);
                     }),
               ],
             ),
             Text(
-              "Aktuell noch offene Todos: ${openTodos.length.toString()}",
+              "Aktuell noch offene Todos: ${todoProvider.openTodos.length.toString()}",
             ),
             Text(
-              "Insgesamt erledigte Todos: ${doneTodos.length.toString()}",
+              "Insgesamt erledigte Todos: ${todoProvider.doneTodos.length.toString()}",
             ),
           ],
         ),
